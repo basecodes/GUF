@@ -16,7 +16,7 @@ namespace GUF {
         template <typename ... ArgsType>
         Widget(GType type,const std::string_view& firstPropertyName,ArgsType... ts);
         explicit Widget(GtkWidget *widget);
-        ~Widget() override = default;
+        ~Widget() override;
 
         virtual void show();
         virtual void destroy();

@@ -1,12 +1,13 @@
 
 #include <Windows/Window.h>
+#include <memory>
 #include "Widget.h"
 
 namespace GUF{
 
-    void destroy(GtkWidget *gtkWidget, gpointer userData) {
-        auto widget = (Widget*)userData;
-        //delete(widget);
+    void widgetDestroy(GtkWidget *gtkWidget, gpointer userData) {
+        auto widget = (Widget*)g_object_get_data((GObject*)userData,"widget");
+        delete(widget);
     }
 
     std::string Widget::getUUID() const {
@@ -21,7 +22,12 @@ namespace GUF{
     Widget::Widget(GtkWidget *widget) {
         _widget = widget;
         _uuid = g_uuid_string_random();
-        g_signal_connect (getGtkWidget(), "destroy", G_CALLBACK(GUF::destroy), this);
+        g_object_set_data((GObject*)_widget,"widget",this);
+        g_signal_connect (getGtkWidget(), "destroy", G_CALLBACK(widgetDestroy), _widget);
+    }
+
+    Widget::~Widget() {
+        g_object_set_data((GObject*)_widget, "widget", nullptr);
     }
 
     void Widget::show() {

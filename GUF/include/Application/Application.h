@@ -12,7 +12,7 @@ namespace GUF{
     class Application: public Object {
     public:
         Application(const std::string_view& applicationId,GApplicationFlags applicationFlags);
-        ~Application() override ;
+        ~Application() override;
 
         virtual int run(int argc,char *argv[]);
         virtual void activate();
