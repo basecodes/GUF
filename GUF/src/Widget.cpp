@@ -6,7 +6,7 @@
 namespace GUF{
 
     void widgetDestroy(GtkWidget *gtkWidget, gpointer userData) {
-        auto widget = (Widget*)g_object_get_data((GObject*)userData,"widget");
+        auto widget = (Widget*)g_object_get_data((GObject*)gtkWidget,"widget");
         delete(widget);
     }
 
@@ -16,49 +16,53 @@ namespace GUF{
 
     template <typename ... ArgsType>
     Widget::Widget(GType type,const std::string_view &firstPropertyName,ArgsType...ts)
-        :Widget(gtk_widget_new(type,firstPropertyName,ts...)) {
+        :Object(gtk_widget_new(type,firstPropertyName,ts...)) {
     }
 
-    Widget::Widget(GtkWidget *widget) {
-        _widget = widget;
+    template<typename... ArgsType>
+    Widget::Widget(const std::string_view &firstPropertyName, ArgsType... ts)
+            :Widget(GTK_TYPE_WIDGET,firstPropertyName,ts...){
+    }
+
+    Widget::Widget(GtkWidget *widget):Object((GObject*)widget) {
         _uuid = g_uuid_string_random();
-        g_object_set_data((GObject*)_widget,"widget",this);
-        g_signal_connect (getGtkWidget(), "destroy", G_CALLBACK(widgetDestroy), _widget);
+        g_object_set_data(getGtkObject(),"widget",this);
+        g_signal_connect (getGtkObject(), "destroy", G_CALLBACK(widgetDestroy), nullptr);
     }
 
     Widget::~Widget() {
-        g_object_set_data((GObject*)_widget, "widget", nullptr);
+        g_object_set_data((GObject*)getGtkObject<GtkWidget*>(), "widget", nullptr);
     }
 
     void Widget::show() {
-        gtk_widget_show_all(getGtkWidget());
+        gtk_widget_show_all(getGtkObject<GtkWidget*>());
     }
 
     void Widget::destroy() {
-        gtk_widget_destroy(getGtkWidget());
+        gtk_widget_destroy(getGtkObject<GtkWidget*>());
     }
 
     bool Widget::inDestruction() {
-        return gtk_widget_in_destruction(getGtkWidget());
+        return gtk_widget_in_destruction(getGtkObject<GtkWidget*>());
     }
 
     void Widget::showNow() {
-        gtk_widget_show_now(getGtkWidget());
+        gtk_widget_show_now(getGtkObject<GtkWidget*>());
     }
 
     void Widget::destroyed(GtkWidget **widget_pointer) {
-        gtk_widget_destroyed(getGtkWidget(),widget_pointer);
+        gtk_widget_destroyed(getGtkObject<GtkWidget*>(),widget_pointer);
     }
 
     void Widget::hide() {
-        gtk_widget_hide(getGtkWidget());
+        gtk_widget_hide(getGtkObject<GtkWidget*>());
     }
 
     void Widget::setParentWindow(Window *window) {
-        gtk_widget_set_parent_window(getGtkWidget(),(GdkWindow*)window->getGtkWidget());
+        gtk_widget_set_parent_window(getGtkObject<GtkWidget*>(),(GdkWindow*)window->getGtkObject<GtkWindow*>());
     }
 
     void Widget::setParent(Widget *widget) {
-        gtk_widget_set_parent(getGtkWidget(),widget->getGtkWidget());
+        gtk_widget_set_parent(getGtkObject<GtkWidget*>(),widget->getGtkObject<GtkWidget*>());
     }
 }

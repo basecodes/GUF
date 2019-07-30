@@ -20,11 +20,11 @@ namespace GUF{
     Container::~Container() {
     }
 
-    void Container::AddWidget(Widget *widget) {
-        gtk_container_add (GTK_CONTAINER (getGtkWidget()), widget->getGtkWidget());
+    void Container::Add(Widget *widget) {
+        gtk_container_add (GTK_CONTAINER (getGtkObject<GtkContainer*>()), widget->getGtkObject<GtkWidget*>());
     }
 
-    void Container::RemoveWidget(Widget *widget) {
-        gtk_container_remove(GTK_CONTAINER (getGtkWidget()), widget->getGtkWidget());
+    void Container::Remove(Widget *widget) {
+        gtk_container_remove(GTK_CONTAINER (getGtkObject()), widget->getGtkObject<GtkWidget*>());
     }
 }

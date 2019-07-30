@@ -20,8 +20,6 @@ namespace GUF{
 
     private:
         static void g_activate(GtkApplication *application, gpointer userData);
-
-        GtkApplication *_application;
     };
 }
 

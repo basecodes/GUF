@@ -3,13 +3,17 @@
 
 namespace GUF{
 
-    template<typename... ArgsType>
-    Object::Object(GType type, const std::string_view &firstPropertyName, ArgsType... ts) {
-        _object = (GObject*)g_object_new(type, firstPropertyName, ts...);
+    Object::Object(GObject *object) {
+        _object = object;
     }
 
-    void Object::setProperty(const std::string_view &propertyId, const GValue *value) {
-        g_object_set_property(_object, propertyId.data(), value);
+    template<typename... ArgsType>
+    Object::Object(GType type, const std::string_view &firstPropertyName, ArgsType... ts)
+        :Object((GObject*)g_object_new(type, firstPropertyName, ts...)){
+    }
+
+    void Object::setProperty(const std::string_view &propertyName, const GValue *value) {
+        g_object_set_property(_object, propertyName.data(), value);
     }
 
     GValue Object::getProperty(const std::string_view &propertyId) {
@@ -29,7 +33,10 @@ namespace GUF{
     void Object::dispatchPropertiesChanged() {
     }
 
-    void Object::notify() {
-        //g_object_notify()
+    void Object::notify(const std::string_view& propertyName) {
+        g_object_notify(_object,propertyName.data());
+    }
+
+    void Object::constructed() {
     }
 }

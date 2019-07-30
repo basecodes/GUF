@@ -10,12 +10,12 @@
 namespace GUF {
 
     class Window;
-    abstract class Widget:Object {
+    class Widget:public Object {
     public:
 
-        template <typename ... ArgsType>
-        Widget(GType type,const std::string_view& firstPropertyName,ArgsType... ts);
         explicit Widget(GtkWidget *widget);
+        template <typename ... ArgsType>
+        explicit Widget(const std::string_view& firstPropertyName,ArgsType...ts);
         ~Widget() override;
 
         virtual void show();
@@ -30,20 +30,12 @@ namespace GUF {
         [[nodiscard]]
         virtual std::string getUUID() const;
 
-        [[nodiscard]]
-        virtual GtkWidget *getGtkWidget() const{
-            return _widget;
-        }
-
     protected:
-        template<typename T>
-        T getGtkWidget() {
-            return (T)(_widget);
-        }
+        template <typename ... ArgsType>
+        Widget(GType type,const std::string_view& firstPropertyName,ArgsType... ts);
 
     private:
         std::string _uuid;
-        GtkWidget *_widget;
     };
 }
 

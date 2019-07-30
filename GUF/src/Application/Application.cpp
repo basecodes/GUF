@@ -17,21 +17,21 @@ namespace GUF {
         uifApplication->activate();
     }
 
-    Application::Application(const std::string_view& applicationId,GApplicationFlags applicationFlags){
-        _application = gtk_application_new(applicationId.data(), applicationFlags);
+    Application::Application(const std::string_view& applicationId,GApplicationFlags applicationFlags)
+        :Object((GObject*)gtk_application_new(applicationId.data(), applicationFlags)){
     }
 
     Application::~Application() {
-        g_object_unref(_application);
+        g_object_unref(getGtkObject());
     }
 
     void Application::AddWindow(Window *window) {
-        gtk_application_add_window(_application, (GtkWindow*)(window->getGtkWidget()));
+        gtk_application_add_window(getGtkObject<GtkApplication*>(), window->getGtkObject<GtkWindow*>());
     }
 
     int Application::run(int argc, char **argv) {
-        g_signal_connect (_application, "activate", G_CALLBACK(Application::g_activate), this);
-        auto status = g_application_run(G_APPLICATION (_application), argc, argv);
+        g_signal_connect (getGtkObject(), "activate", G_CALLBACK(Application::g_activate), this);
+        auto status = g_application_run(G_APPLICATION (getGtkObject<GtkApplication*>()), argc, argv);
         return status;
     }
 

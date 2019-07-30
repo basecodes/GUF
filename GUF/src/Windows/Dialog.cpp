@@ -3,9 +3,19 @@
 
 namespace GUF{
 
+    template<typename... ArgsType>
+    Dialog::Dialog(const std::string_view &firstPropertyName, ArgsType... ts)
+        :Dialog(GTK_TYPE_DIALOG,firstPropertyName, ts...) {
+    }
+
+    template<typename... ArgsType>
+    Dialog::Dialog(GType type, const std::string_view &firstPropertyName, ArgsType... ts)
+            :Window(type,firstPropertyName,ts...) {
+
+    }
+
     Dialog::Dialog():Window((GtkWindow*)(GtkDialog*)gtk_dialog_new ()) {
-        _dialog = (GtkDialog*)Window::getGtkWidget();
-        _box = new Box((GtkBox*)gtk_dialog_get_content_area(_dialog));
+        _box = new Box((GtkBox*)gtk_dialog_get_content_area(getGtkObject<GtkDialog *>()));
     }
 
     Dialog::~Dialog() {

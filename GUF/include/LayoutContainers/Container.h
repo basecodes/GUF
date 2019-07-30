@@ -17,8 +17,8 @@ namespace GUF{
         explicit Container(GtkContainer *container);
         ~Container() override;
 
-        virtual void AddWidget(Widget *widget) ;
-        virtual void RemoveWidget(Widget *widget) ;
+        virtual void Add(Widget *widget) ;
+        virtual void Remove(Widget *widget) ;
 
     protected:
         template <typename ... ArgsType>

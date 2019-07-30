@@ -34,7 +34,7 @@ namespace GUF{
     }
 
     void Button::addClickEventListener(const ClickCallback& clickCallback) {
-        g_signal_connect (getGtkWidget<GtkButton*>(), "clicked", G_CALLBACK (Button::click), this);
+        g_signal_connect (getGtkObject<GtkButton *>(), "clicked", G_CALLBACK (Button::click), this);
         _clickCallback = clickCallback;
     }
 }

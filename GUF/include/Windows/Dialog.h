@@ -12,14 +12,15 @@ namespace GUF{
         explicit Dialog();
         ~Dialog() override ;
 
-        [[nodiscard]]
-        GtkWidget *getGtkWidget() const override{
-            return (GtkWidget*)_dialog;
-        }
-
         Box *getBox();
+
+        template <typename ... ArgsType>
+        explicit Dialog(const std::string_view& firstPropertyName,ArgsType...ts);
+    protected:
+        template <typename ... ArgsType>
+        explicit Dialog(GType type,const std::string_view& firstPropertyName,ArgsType...ts);
+
     private:
-        GtkDialog *_dialog;
         Box *_box;
     };
 }

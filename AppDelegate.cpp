@@ -24,10 +24,10 @@ void TestWindow(GUF::Application *application){
         g_print("\n");
     });
 
-    box->AddWidget(btn);
-    box->AddWidget(btn2);
+    box->Add(btn);
+    box->Add(btn2);
 
-    window->AddWidget(box);
+    window->Add(box);
     application->AddWindow(window);
     window->show();
 }
@@ -48,8 +48,8 @@ void TestDialog(GUF::Application *application){
         g_print("\n");
     });
 
-    dialog->getBox()->AddWidget(btn);
-    dialog->getBox()->AddWidget(btn2);
+    dialog->getBox()->Add(btn);
+    dialog->getBox()->Add(btn2);
     dialog->show();
     btn->hide();
     dialog->showNow();
