@@ -11,4 +11,7 @@
 #include "LayoutContainers/Bin.h"
 #include "LayoutContainers/Box.h"
 
+#include "Value/Boxed.h"
+#include "Value/Value.h"
+
 #endif //GUF_GUF_H

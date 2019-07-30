@@ -5,10 +5,11 @@ file(GLOB SOURCES
         "src/*.cpp"
         "src/Windows/*.cpp"
         "src/Application/*.cpp"
-        "src/InteractiveWidgets/*cpp"
-        "src/LayoutContainers/*cpp"
+        "src/InteractiveWidgets/*.cpp"
+        "src/LayoutContainers/*.cpp"
+        "src/Value/*.cpp"
         )
-add_library(${PROJECT_NAME} ${SOURCES} include/LayoutContainers/Bin.h)
+add_library(${PROJECT_NAME} ${SOURCES})
 
 target_include_directories(${PROJECT_NAME}
         PUBLIC
@@ -17,6 +18,7 @@ target_include_directories(${PROJECT_NAME}
         ${PROJECT_SOURCE_DIR}/Application
         ${PROJECT_SOURCE_DIR}/InteractiveWidgets
         ${PROJECT_SOURCE_DIR}/LayoutContainers
+        ${PROJECT_SOURCE_DIR}/Value
         )
 
 find_package(PkgConfig REQUIRED)

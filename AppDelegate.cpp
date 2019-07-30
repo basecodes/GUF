@@ -16,7 +16,7 @@ void TestWindow(GUF::Application *application){
         g_print("%s", btn->getUUID().data());
         g_print("\n");
     });
-    auto box = new GUF::Box(GtkOrientation::GTK_ORIENTATION_HORIZONTAL,50);
+    auto box = new GUF::Box(GtkOrientation::GTK_ORIENTATION_HORIZONTAL,10);
 
     auto btn2 = new GUF::Button("this Button2");
     btn2->addClickEventListener([=](){
@@ -27,6 +27,10 @@ void TestWindow(GUF::Application *application){
     box->Add(btn);
     box->Add(btn2);
 
+//    GValue v = {};
+//    g_value_init (&v, G_TYPE_INT);
+//    g_value_set_int(&v,500);
+//    g_object_set_property(box->getGtkObject(),"spacing",&v);
     window->Add(box);
     application->AddWindow(window);
     window->show();
@@ -59,5 +63,5 @@ void TestDialog(GUF::Application *application){
 void AppDelegate::activate() {
     Application::activate();
 
-    TestDialog(this);
+    TestWindow(this);
 }
