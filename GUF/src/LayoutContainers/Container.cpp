@@ -3,6 +3,20 @@
 
 namespace GUF{
 
+    template <typename ... ArgsType>
+    Container::Container(const std::string_view& firstPropertyName,ArgsType...ts)
+        :Container(GTK_TYPE_CONTAINER,firstPropertyName,ts...){
+    }
+
+    template<typename... ArgsType>
+    Container::Container(GType type, const std::string_view &firstPropertyName, ArgsType... ts)
+            :Widget(type,firstPropertyName,ts...) {
+    }
+
+    Container::Container(GtkContainer *container) : Widget((GtkWidget*)container) {
+
+    }
+
     Container::~Container() {
     }
 

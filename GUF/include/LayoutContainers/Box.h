@@ -8,23 +8,19 @@
 namespace GUF{
     class Box :public Container{
     public:
-        Box();
-        explicit Box(GtkBox *gtkBox);
+        Box():Box(GtkOrientation::GTK_ORIENTATION_VERTICAL,1){}
+        explicit Box(GtkBox *box):Container((GtkContainer*)box){}
         explicit Box(GtkOrientation orientation):Box(orientation,1){}
 
-        Box(GtkOrientation orientation,int spacing);
-
+        Box(GtkOrientation orientation,int spacing)
+        :Box((GtkBox*)gtk_box_new(orientation,spacing)) {}
         ~Box() override = default;
 
-        [[nodiscard]]
-        GtkWidget *getGtkWidget() const override{
-            return (GtkWidget*)_box;
-        }
-
+        template <typename ... ArgsType>
+        explicit Box(const std::string_view& firstPropertyName,ArgsType...ts);
     protected:
-
-    private:
-        GtkBox *_box;
+        template <typename ... ArgsType>
+        explicit Box(GType type,const std::string_view& firstPropertyName,ArgsType...ts);
     };
 }
 

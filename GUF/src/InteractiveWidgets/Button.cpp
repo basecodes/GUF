@@ -4,11 +4,19 @@
 
 namespace GUF{
 
-    Button::Button(const std::string_view &label) {
-        _button = (GtkButton*)gtk_button_new_with_label(label.data());
+    Button::Button(const std::string_view &label)
+        :Bin((GtkBin*)gtk_button_new_with_label(label.data())) {
     }
 
-    Button::~Button() {
+    template<typename... ArgsType>
+    Button::Button(const std::string_view &firstPropertyName, ArgsType... ts)
+            :Button(GTK_TYPE_BUTTON,firstPropertyName, ts...) {
+
+    }
+
+    template<typename... ArgsType>
+    Button::Button(GType type, const std::string_view &firstPropertyName, ArgsType... ts)
+            :Bin(type,firstPropertyName,ts...) {
 
     }
 
@@ -25,12 +33,8 @@ namespace GUF{
         button->_clickCallback();
     }
 
-    GtkWidget *Button::getGtkWidget()const {
-        return (GtkWidget*)_button;
-    }
-
     void Button::addClickEventListener(const ClickCallback& clickCallback) {
-        g_signal_connect (_button, "clicked", G_CALLBACK (Button::click), this);
+        g_signal_connect (getGtkWidget<GtkButton*>(), "clicked", G_CALLBACK (Button::click), this);
         _clickCallback = clickCallback;
     }
 }

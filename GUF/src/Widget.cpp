@@ -4,11 +4,24 @@
 
 namespace GUF{
 
+    void destroy(GtkWidget *gtkWidget, gpointer userData) {
+        auto widget = (Widget*)userData;
+        //delete(widget);
+    }
+
     std::string Widget::getUUID() const {
         return _uuid;
     }
 
-    Widget::Widget():_uuid(g_uuid_string_random()) {
+    template <typename ... ArgsType>
+    Widget::Widget(GType type,const std::string_view &firstPropertyName,ArgsType...ts)
+        :Widget(gtk_widget_new(type,firstPropertyName,ts...)) {
+    }
+
+    Widget::Widget(GtkWidget *widget) {
+        _widget = widget;
+        _uuid = g_uuid_string_random();
+        g_signal_connect (getGtkWidget(), "destroy", G_CALLBACK(GUF::destroy), this);
     }
 
     void Widget::show() {

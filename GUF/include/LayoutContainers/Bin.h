@@ -7,8 +7,15 @@
 namespace GUF{
     class Bin :public Container {
     public:
-        Bin();
+
+        explicit Bin(GtkBin* bin);
         ~Bin() override;
+
+        template <typename ... ArgsType>
+        explicit Bin(const std::string_view& firstPropertyName,ArgsType...ts);
+    protected:
+        template <typename ... ArgsType>
+        explicit Bin(GType type,const std::string_view& firstPropertyName,ArgsType...ts);
     };
 }
 #endif //GUF_BIN_H

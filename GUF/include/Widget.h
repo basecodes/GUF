@@ -4,15 +4,19 @@
 
 #include <string>
 #include "Common.h"
+#include "Object.h"
 #include <gtk/gtk.h>
 
 namespace GUF {
 
     class Window;
-    abstract class Widget {
+    abstract class Widget:Object {
     public:
-        Widget();
-        virtual ~Widget() = default;
+
+        template <typename ... ArgsType>
+        Widget(GType type,const std::string_view& firstPropertyName,ArgsType... ts);
+        explicit Widget(GtkWidget *widget);
+        ~Widget() override = default;
 
         virtual void show();
         virtual void destroy();
@@ -27,10 +31,19 @@ namespace GUF {
         virtual std::string getUUID() const;
 
         [[nodiscard]]
-        virtual GtkWidget *getGtkWidget() const = 0;
+        virtual GtkWidget *getGtkWidget() const{
+            return _widget;
+        }
+
+    protected:
+        template<typename T>
+        T getGtkWidget() {
+            return (T)(_widget);
+        }
 
     private:
         std::string _uuid;
+        GtkWidget *_widget;
     };
 }
 

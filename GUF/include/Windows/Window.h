@@ -9,14 +9,13 @@
 
 namespace GUF {
 
-    class FormFactory;
     class Application;
     class Window :public Bin{
     public:
 
-        Window();
-        explicit Window(GtkWindowType windowType);
-        explicit Window(GtkWindow *window);
+        Window():Window(GtkWindowType::GTK_WINDOW_TOPLEVEL) {}
+        explicit Window(GtkWindowType windowType):Bin((GtkBin*)gtk_window_new(windowType)) {}
+        explicit Window(GtkWindow *window):Bin((GtkBin*)window){}
 
         ~Window() override = default;
 
@@ -26,13 +25,11 @@ namespace GUF {
         void setSize(int width,int height);
         void setPosition(GtkWindowPosition windowPosition);
 
-        [[nodiscard]]
-        GtkWidget *getGtkWidget() const override {
-            return (GtkWidget *)_window;
-        }
-
-    private:
-        GtkWindow *_window;
+        template <typename ... ArgsType>
+        explicit Window(const std::string_view& firstPropertyName,ArgsType...ts);
+    protected:
+        template <typename ... ArgsType>
+        explicit Window(GType type,const std::string_view& firstPropertyName,ArgsType...ts);
     };
 }
 

@@ -11,14 +11,18 @@ namespace GUF{
 
     class Container: public Widget {
     public:
+        template <typename ... ArgsType>
+        explicit Container(const std::string_view& firstPropertyName,ArgsType...ts);
 
+        explicit Container(GtkContainer *container);
         ~Container() override;
 
         virtual void AddWidget(Widget *widget) ;
         virtual void RemoveWidget(Widget *widget) ;
 
-        [[nodiscard]]
-        virtual GtkWidget *getGtkWidget() const = 0;
+    protected:
+        template <typename ... ArgsType>
+        Container(GType type,const std::string_view& firstPropertyName,ArgsType...ts);
     };
 }
 

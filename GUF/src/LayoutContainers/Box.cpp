@@ -2,15 +2,15 @@
 
 namespace GUF{
 
-    Box::Box(GtkOrientation orientation /*= GtkOrientation::GTK_ORIENTATION_VERTICAL*/,int spacing /*= 1*/) {
-        _box = (GtkBox*)gtk_box_new(orientation,spacing);
-    }
-
-    Box::Box() {
+    template<typename... ArgsType>
+    Box::Box(const std::string_view &firstPropertyName, ArgsType... ts)
+        :Box(GTK_TYPE_BOX,firstPropertyName, ts...) {
 
     }
 
-    Box::Box(GtkBox *gtkBox) {
-        _box = gtkBox;
+    template<typename... ArgsType>
+    Box::Box(GType type, const std::string_view &firstPropertyName, ArgsType... ts)
+        :Box(type, firstPropertyName,ts...) {
+
     }
 }
