@@ -8,6 +8,7 @@ file(GLOB SOURCES
         "src/InteractiveWidgets/*.cpp"
         "src/LayoutContainers/*.cpp"
         "src/Value/*.cpp"
+
         )
 add_library(${PROJECT_NAME} ${SOURCES})
 

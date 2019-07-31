@@ -14,23 +14,35 @@ namespace GUF{
         Boxed(GType type,gpointer value);
         ~Boxed();
 
-        gpointer copy();
+        Boxed* copy();
         void free();
 
-        void addCallback(CopyCallback copyCallback,FreeCallback freeCallback){
-            _copyCallback = std::move(copyCallback);
-            _freeCallback = std::move(freeCallback);
+        void addCallback(const CopyCallback& copyCallback,const FreeCallback& freeCallback){
+            _copyCallback = copyCallback;
+            _freeCallback = freeCallback;
+        }
+
+        gpointer getValue() const{
+            return _tuple._value;
+        }
+
+        GType getType() const{
+            return _tuple._type;
         }
 
         static GType boxedTypeRegister(const std::string_view& name);
         static GType pointerTypeRegister(const std::string_view& name);
 
     private:
+        struct Tuple{
+            gpointer _value;
+            GType _type;
+            Boxed *_boxed;
+        };
         static gpointer gBoxedCopyFunc(gpointer boxed);
         static void gBoxedFreeFunc(gpointer boxed) ;
 
-        gpointer _boxed;
-        GType _type;
+        Tuple _tuple;
         CopyCallback _copyCallback;
         FreeCallback _freeCallback;
     };
